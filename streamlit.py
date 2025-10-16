@@ -1,17 +1,15 @@
 import streamlit as st
+import display
 
-st.title("Hello Streamlit-er 👋")
-st.markdown(
-    """
-    This is a playground for you to try Streamlit and have fun.
 
-    **There's :rainbow[so much] you can build!**
+def main():
+    st.title("SKAIZEN App")
 
-    We prepared a few examples for you to get started. Just
-    click on the buttons above and discover what you can do
-    with Streamlit.
-    """
-)
+    keywords = st.text_input("Mots-clés")
 
-if st.button("Send balloons!"):
-    st.balloons()
+    if keywords:
+        display.launchRequest(st, keywords.split())
+
+
+if __name__ == "__main__":
+    main()
