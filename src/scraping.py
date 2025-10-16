@@ -44,4 +44,4 @@ def fetch(query, start_date=1, end_date=1):
     return download_articles(links)
 
 
-print(fetch("LLM")[0])
+print(fetch("LLM"))
