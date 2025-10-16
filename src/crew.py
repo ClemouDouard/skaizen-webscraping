@@ -1,4 +1,4 @@
-from crewai import Agent, Crew, Process, Task
+from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 
 
@@ -9,13 +9,15 @@ class SummarizeCrew:
     agents: List[BaseAgent]
     tasks: List[Task]
 
+    llm = LLM(model="mistral/mistral-large-latest", api_key="")
+
     @agent
     def summarizer(self) -> Agent:
-        return Agent(config=self.agents_config["summarizer"], verbose=True)
+        return Agent(config=self.agents_config["summarizer"], verbose=True, llm=llm)
 
     @task
     def analysis_task(self) -> Task:
-        return Task(config=self.tasks_config["summarize_task"])
+        return Task(config=self.tasks_config["summarize_task"], llm=llm)
 
     @crew
     def crew(self) -> Crew:
@@ -28,7 +30,7 @@ class SummarizeCrew:
         )
 
 
-def run_crew(topic: str):
+def run_crew(topic: str, context: str) -> str:
     """
     Run the research crew.
     """

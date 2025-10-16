@@ -1,7 +1,7 @@
 summarize_task:
   description: >
     You are a summarization agent.
-    Your goal is to produce a structured summary about {topic} using the provided documents.
+    Your goal is to produce a structured summary about {topic} using the provided {context}.
 
     Follow **strictly** this output structure:
       1. Start with a section "# Sources"
