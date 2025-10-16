@@ -103,7 +103,7 @@ The goal is to be make an application that can blablabla
 3. Get your api keys
    1. Go to those websites
      - https://serper.dev/
-   2. `touch .secrets.py`
+   2. `touch .env`
    3. Put your keys in there
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
