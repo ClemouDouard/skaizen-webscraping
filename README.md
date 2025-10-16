@@ -102,12 +102,8 @@ The goal is to be make an application that can blablabla
    ```
 3. Get your api keys
    1. Go to those websites
-   - https://serper.dev/
-   -
-   2.
-  ``` sh
-  touch .secrets.py
-  ```
+     - https://serper.dev/
+   2. `touch .secrets.py`
    3. Put your keys in there
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -143,16 +139,14 @@ Don't forget to give the project a star! Thanks again!
 
 ### Top contributors:
 
-<a href="https://github.com/ClemouDouard/ebooks_generator/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ClemouDouard/ebooks_generator" alt="contrib.rocks image" />
+<a href="https://github.com/ClemouDouard/skaizen-webscraping/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ClemouDouard/skaizen-webscraping" alt="contrib.rocks image" />
 </a>
-
-
 
 <!-- CONTACT -->
 ## Contact
 
-Project Link: [https://github.com/ClemouDouard/ebooks_generator](https://github.com/ClemouDouard/ebooks_generator)
+Project Link: [https://github.com/ClemouDouard/skaizen-webscraping](https://github.com/ClemouDouard/skaizen-webscraping)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -161,16 +155,16 @@ Project Link: [https://github.com/ClemouDouard/ebooks_generator](https://github.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/ClemouDouard/ebooks_generator.svg?style=for-the-badge
-[contributors-url]: https://github.com/ClemouDouard/ebooks_generator/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/ClemouDouard/ebooks_generator.svg?style=for-the-badge
-[forks-url]: https://github.com/ClemouDouard/ebooks_generator/network/members
-[stars-shield]: https://img.shields.io/github/stars/ClemouDouard/ebooks_generator.svg?style=for-the-badge
-[stars-url]: https://github.com/ClemouDouard/ebooks_generator/stargazers
-[issues-shield]: https://img.shields.io/github/issues/ClemouDouard/ebooks_generator.svg?style=for-the-badge
-[issues-url]: https://github.com/ClemouDouard/ebooks_generator/issues
-[license-shield]: https://img.shields.io/github/license/ClemouDouard/ebooks_generator.svg?style=for-the-badge
-[license-url]: https://github.com/ClemouDouard/ebooks_generator/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/ClemouDouard/skaizen-webscraping.svg?style=for-the-badge
+[contributors-url]: https://github.com/ClemouDouard/skaizen-webscraping/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/ClemouDouard/skaizen-webscraping.svg?style=for-the-badge
+[forks-url]: https://github.com/ClemouDouard/skaizen-webscraping/network/members
+[stars-shield]: https://img.shields.io/github/stars/ClemouDouard/skaizen-webscraping.svg?style=for-the-badge
+[stars-url]: https://github.com/ClemouDouard/skaizen-webscraping/stargazers
+[issues-shield]: https://img.shields.io/github/issues/ClemouDouard/skaizen-webscraping.svg?style=for-the-badge
+[issues-url]: https://github.com/ClemouDouard/skaizen-webscraping/issues
+[license-shield]: https://img.shields.io/github/license/ClemouDouard/skaizen-webscraping.svg?style=for-the-badge
+[license-url]: https://github.com/ClemouDouard/skaizen-webscraping/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/clementleveque
 [product-screenshot]: images/screenshot.png
