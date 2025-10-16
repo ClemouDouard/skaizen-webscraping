@@ -1,6 +1,5 @@
 from __future__ import annotations
-from datetime import date, time, timedelta
-from time import strftime
+from datetime import date, timedelta
 from lorem_text import lorem
 from typing import final
 import random
