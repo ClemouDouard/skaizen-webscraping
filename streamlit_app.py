@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
-from unittest import result
 import streamlit as st
-from streamlit.elements.lib.layout_utils import WidthWithoutContent
+from src.scraping import fetch
 import src.request as request
 
 st.set_page_config(
@@ -9,7 +8,8 @@ st.set_page_config(
     page_icon="⚙️",
 )
 
-st.markdown("""
+st.markdown(
+    """
     <style>
         html, body, [class*="css"] {
                 font-family: 'Inter', sans-serif;
@@ -59,24 +59,32 @@ st.markdown("""
             background-repeat: no-repeat;
             background-size: contain;
         }
-                
+
         div[data-testid="stDownloadButton"] > button:hover {
             background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(37,99,235,0.3);
         }
     </style>
-        """, unsafe_allow_html=True)
+        """,
+    unsafe_allow_html=True,
+)
+
 
 def main():
-    st.markdown("""
+    st.markdown(
+        """
     <div class='header'>
         <h1>⚙️ SKAIZen Scrap</h1>
         <p>Outil d'analyse et d'extraction de données web</p>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
     search_container = st.container(horizontal=True, border=True)
-    keywords = search_container.text_input("Mots-clés", placeholder="Ex: IA, innovation, santé...")
+    keywords = search_container.text_input(
+        "Mots-clés", placeholder="Ex: IA, innovation, santé..."
+    )
     start_date = search_container.date_input(
         "Start Date", width=100, value=(datetime.today() - timedelta(days=7))
     )
@@ -85,18 +93,23 @@ def main():
     result_container = st.container(border=True, horizontal=True)
 
     bullet_container = result_container.container(border=True)
-    bullet_container.markdown("<h3 style='color:#1e3a8a;'>RÉSULTATS</h3>", unsafe_allow_html=True)
-
+    bullet_container.markdown(
+        "<h3 style='color:#1e3a8a;'>RÉSULTATS</h3>", unsafe_allow_html=True
+    )
 
     sources_container = result_container.container(border=True)
-    sources_container.markdown("<h3 style='color:#1e3a8a;'>SOURCES</h3>", unsafe_allow_html=True)
+    sources_container.markdown(
+        "<h3 style='color:#1e3a8a;'>SOURCES</h3>", unsafe_allow_html=True
+    )
 
     if keywords:
         with st.spinner("⏳ Récupération des résultats..."):
-            results = request.launchRequest(keywords, start_date, end_date)
-            md = results.to_md()
+            # results = request.launchRequest(keywords, start_date, end_date)
+            # md = results.to_md()
+            md = request.launchRequestDebug(keywords)
             _ = bullet_container.markdown(md)
-            st.markdown("""
+            st.markdown(
+                """
                 <style>
                 div[data-testid="stDownloadButton"] > button {
                     background-color: #000080;
@@ -112,7 +125,9 @@ def main():
                     color: white;
                 }
                 </style>
-            """, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True,
+            )
 
             st.download_button(
                 label="Exporter",

@@ -1,16 +1,25 @@
 from __future__ import annotations
 from datetime import date, timedelta
-from lorem_text import lorem
 from typing import final
 import random
+from src.crew import run_crew
+from src.scraping import fetch
+import json
 
 
-def get_dummy_url() -> str:
-    res = "https://"
-    for _ in range(random.randrange(1, 3)):
-        res += lorem.words(random.randrange(5, 10))
-    res += ".com"
-    return res
+def list_to_json_str(texts):
+    data = {"articles": []}
+
+    for i, text in enumerate(texts, 1):
+        data["articles"].append({"id": i, "content": text.strip()})
+
+    return json.dumps(data, ensure_ascii=False, indent=2)
+
+
+def summary(topic: str) -> str:
+    context = fetch(topic)
+
+    return run_crew(topic, list_to_json_str(context))
 
 
 def parse_date(input: str) -> date | None:
@@ -45,7 +54,7 @@ def parse_result(markdown: str) -> RequestResult | None:
         return None
 
     # Parsing the topic
-    topic = current_line.lstrip("#").strip
+    topic: str = current_line.lstrip("#").strip()
     cursor += 1
     current_line = lines[cursor].strip()
 
@@ -53,7 +62,7 @@ def parse_result(markdown: str) -> RequestResult | None:
     bullet_points: list[BulletPoint] = []
     while length > cursor and current_line:
         bullet_point = current_line.lstrip("-").strip()
-        start_date, bullet_point = bullet_point.split(":", 1)
+        start_date, bullet_point = bullet_point.split("-", 1)
         bullet_points.append(BulletPoint(parse_date(start_date), bullet_point))
 
         cursor += 1
@@ -72,31 +81,18 @@ def get_random_date_between(start: date, end: date) -> date:
     return start + timedelta(days=random.randint(0, delta_days))
 
 
-def launchRequest(keywords: str, start_date: date, end_date: date) -> RequestResult:
-    # Dummy request result for the moment
-    ks = keywords.split()
-    sources: list[tuple[str, str]] = [(get_dummy_url(), lorem.sentence()) for _ in ks]
-    bullet_points = [
-        BulletPoint(
-            get_random_date_between(start_date, end_date),
-            " ".join(
-                [
-                    lorem.sentence()
-                    + (
-                        f"[{random.randrange(0, len(sources))}]"
-                        if random.randrange(0, 100) > 65
-                        else ""
-                    )
-                    for _ in range(random.randrange(1, 4))
-                ]
-            ),
-        )
-        for _ in ks
-    ]
-    return RequestResult(keywords, sources, bullet_points)
+def launchRequest(keywords: str, _start_date: date, _end_date: date) -> RequestResult:
+    res = parse_result(summary(keywords))
+    if res is None:
+        raise NotImplementedError("PARSE ERROR")
+    return res
 
 
-def date_to_json(self):
+def launchRequestDebug(keywords: str) -> str:
+    return summary(keywords)
+
+
+def date_to_json(d: date | None):
     pass
 
 
