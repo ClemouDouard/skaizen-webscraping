@@ -18,13 +18,20 @@ def main():
     result_container = st.container(border=True, horizontal=True)
 
     bullet_container = result_container.container(border=True)
+    bullet_container.subheader("RÉSULTATS")
 
     sources_container = result_container.container(border=True)
+    sources_container.subheader("SOURCES")
 
     if keywords:
         results = request.launchRequest(keywords, start_date, end_date)
         md = results.to_md()
         _ = bullet_container.markdown(md)
+        st.download_button(
+            label="Exporter",
+            data=md,
+            file_name="results.csv",
+        )
 
 
 if __name__ == "__main__":
