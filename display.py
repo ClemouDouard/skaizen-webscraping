@@ -1,4 +1,8 @@
-def launchRequest(st, keywords: list[str]):
-    st.write("Launched requests for: ")
-    for keyword in keywords:
-        st.markdown(f"- {keyword}")
+from lorem_text import lorem
+
+
+def launchRequest(st, keywords: str):
+    st.write(f"Launched requests for {keywords}:")
+    for keyword in keywords.split():
+        txt = lorem.paragraph()
+        st.markdown(f"- {txt}")

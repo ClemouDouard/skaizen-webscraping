@@ -11,7 +11,7 @@ def main():
     end_date = container.date_input("End Date", width=100)
 
     if keywords:
-        display.launchRequest(st, keywords.split())
+        display.launchRequest(st, keywords)
 
 
 if __name__ == "__main__":
