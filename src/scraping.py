@@ -1,5 +1,6 @@
 from crewai_tools import SerperDevTool, ScrapeWebsiteTool
 from dotenv import load_dotenv
+import newspaper
 from newspaper import Article, news_pool
 
 load_dotenv()
@@ -23,17 +24,22 @@ def download_articles(links):
     news_pool.set(articles)
     news_pool.join()
 
+    res = []
     for e in articles:
-        e.parse()
-        e = e.text
+        try:
+            e.parse()
+            res.append(e.text)
+        except newspaper.article.ArticleException:
+            pass
 
-    return articles
+    return res
 
 
 def fetch(query, start_date=1, end_date=1):
     search_tool = SerperDevTool(n_results=5)
     res = search_tool.run(search_query=query)
     links = [e["link"] for e in res["organic"]]
+    print(links)
 
     return download_articles(links)
 
