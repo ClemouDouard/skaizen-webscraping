@@ -29,7 +29,7 @@ def download_articles(links):
             e.parse()
             res.append(e.text)
         except newspaper.article.ArticleException:
-            res.append("")
+            pass
 
     return res
 
