@@ -2,3 +2,4 @@ streamlit
 lorem-text
 crewai
 crewai_tools
+newspaper3k
