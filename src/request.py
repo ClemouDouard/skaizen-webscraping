@@ -28,16 +28,17 @@ def list_to_json_str(articles):
     return json.dumps(data, ensure_ascii=False, indent=2)
 
 
-def summary(topic: str, start_date: date, end_date: date) -> str:
+def summary(topic: str, start_date: date, end_date: date):
     context = fetch(topic, start_date, end_date)
 
     if not context:
         print("⚠️ Aucun article trouvé, résumé impossible.")
-        return "No articles found."
+        return ("No articles found.", [])
 
     context_json = list_to_json_str(context)
+    sources = [(dict["url"], "Dummy Title") for dict in context]
 
-    return run_summary(topic, context_json)
+    return (run_summary(topic, context_json), sources)
 
 
 def parse_date(input: str) -> date | None:
@@ -80,8 +81,8 @@ def parse_result(markdown: str) -> RequestResult | None:
     bullet_points: list[BulletPoint] = []
     while length > cursor and current_line:
         bullet_point = current_line.lstrip("-").strip()
-        start_date, bullet_point = bullet_point.split("-", 1)
-        bullet_points.append(BulletPoint(parse_date(start_date), bullet_point))
+        start_date, bullet_point = bullet_point.split(":", 1)
+        bullet_points.append(BulletPoint(start_date, bullet_point))
 
         cursor += 1
         if length <= cursor:
@@ -100,25 +101,25 @@ def get_random_date_between(start: date, end: date) -> date:
 
 
 def launchRequest(
-    keywords: str, start_date: date, end_date: date
+    keywords: str, start_date: date, end_date: date, advanced: bool
 ) -> RequestResult | DummyToMd:
-    sum = summary(keywords, start_date, end_date)
+    (sum, sources) = summary(keywords, start_date, end_date)
     res = parse_result(sum)
     if res is None:
-        return DummyToMd(sum)
+        return DummyToMd(sum, sources)
     return res
 
 
 class DummyToMd:
-    def __init__(self, txt: str):
+    def __init__(self, txt: str, sources):
         self.txt = txt
+        self.sources = sources
 
     def to_md(self):
         return self.txt
 
-
-def launchRequestDebug(keywords: str, start_date: date, end_date: date) -> str:
-    return summary(keywords, start_date, end_date)
+    def get_sources(self):
+        return self.sources
 
 
 def date_to_json(d: date | None):
@@ -131,13 +132,13 @@ def date_to_md(d: date | None):
 
 @final
 class BulletPoint:
-    def __init__(self, d: date | None, text: str):
+    def __init__(self, d: str, text: str):
         self.date = d
         self.text = text
 
     def to_md(self, sources: list[tuple[str, str]]):
         # todo: handle source references
-        return "- " + date_to_md(self.date) + " - " + self.text
+        return "- **" + self.date + "** - " + self.text
 
     def to_json(self):
         pass
@@ -163,3 +164,6 @@ class RequestResult:
 
     def to_json(self):
         pass
+
+    def get_sources(self):
+        return self.sources

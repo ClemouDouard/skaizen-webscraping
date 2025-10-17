@@ -155,10 +155,16 @@ def main():
 
     if keywords:
         with st.spinner("⏳ Récupération des résultats..."):
-            # results = request.launchRequest(keywords, start_date, end_date)
-            # md = results.to_md()
-            md = request.launchRequest(keywords, start_date, end_date)
-
+            results = request.launchRequest(keywords, start_date, end_date, advanced)
+            md = results.to_md()
+            sources_container.write(
+                "\n".join(
+                    [
+                        "-" + src[0] + ": **" + src[1] + "**"
+                        for src in results.get_sources()
+                    ]
+                )
+            )
             # Update the result placeholder
             with result_placeholder.container():
                 st.markdown(md)
