@@ -32,8 +32,9 @@ def list_to_json_str(articles):
 
     return json.dumps(data, ensure_ascii=False, indent=2)
 
+
 def parse_search_result(res):
-    r = {"link":[], "name":[]}
+    r = {"link": [], "name": []}
     for e in res:
         r["link"].append(e["url"])
         r["name"].append(e["title"])
@@ -50,12 +51,14 @@ def summary(topic: str) -> str:
 
     context_json = list_to_json_str(context)
 
-    return run_crew(topic, context_json)
+    return run_summary(topic, context_json)
+
 
 def priority(request, start, end):
-    res = fetch(request,start,end)
+    res = fetch(request, start, end)
     inp = parse_search_result(res)
     return run_prioritize(inp)
+
 
 if __name__ == "__main__":
     print(summary("LLM"))
