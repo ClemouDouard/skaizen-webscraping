@@ -5,3 +5,4 @@ crewai_tools
 newspaper3k
 lxml_html_clean
 streamlit-browser-engine
+browser_detection
