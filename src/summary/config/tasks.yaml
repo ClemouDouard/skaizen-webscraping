@@ -18,7 +18,7 @@ summarize_task:
     2. Then write a section "# {topic}"
        - Each bullet point MUST:
          - Represent exactly **one key idea or event**.
-         - Begin with **one single date** in format "YYYY-MM-DD" (or "?" if unknown).
+         - Begin with **one single date** in format "YYYY-MM-DD" (or "?" if unknown). CLARIFICATION : You should try to find the date in the article, if you don't find it, put "?" as mentionned before.
          - Follow this exact syntax:
            - "YYYY-MM-DD" : short factual statement. [1]
          - Use **only one date per bullet point**.
