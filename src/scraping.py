@@ -1,25 +1,12 @@
-from crewai_tools import SerperDevTool, ScrapeWebsiteTool
-from dotenv import load_dotenv
-import newspaper
+from crewai_tools import SerperDevTool
 from newspaper import Article, news_pool
+from datetime import datetime, date
 
-load_dotenv()
-
-# search_tool = SerperDevTool(n_results=5)
-#
-# print(
-#   search_tool.run(
-#       search_query="LLM",
-#   )
-# )
-
-"""
-Output Example:
-    {'searchParameters': {'q': 'LLM', 'type': 'search', 'num': 5, 'engine': 'google'}, 'organic': [{'title': 'Large language model - Wikipedia', 'link': 'https://en.wikipedia.org/wiki/Large_language_model', 'snippet': 'A large language model (LLM) is a language model trained with self-supervised machine learning on a vast amount of text, designed for natural language ...', 'position': 1, 'sitelinks': [{'title': 'LLM (disambiguation)', 'link': 'https://en.wikipedia.org/wiki/LLM_(disambiguation)'}, {'title': 'List', 'link': 'https://en.wikipedia.org/wiki/List_of_large_language_models'}, {'title': 'Prompt engineering', 'link': 'https://en.wikipedia.org/wiki/Prompt_engineering'}, {'title': 'Self-supervised learning', 'link': 'https://en.wikipedia.org/wiki/Self-supervised_learning'}]}, {'title': 'What is an LLM (large language model)? - Cloudflare', 'link': 'https://www.cloudflare.com/learning/ai/what-is-large-language-model/', 'snippet': 'LLMs are machine learning AI programs that comprehend and generate human language text, trained on large datasets to recognize and interpret language.', 'position': 2}, {'title': 'Google NotebookLM | AI Research Tool & Thinking Partner', 'link': 'https://notebooklm.google/', 'snippet': 'Meet NotebookLM, the AI research tool and thinking partner that can analyze your sources, turn complexity into clarity and transform your content.', 'position': 3}, {'title': 'What Are Large Language Models (LLMs)? - IBM', 'link': 'https://www.ibm.com/think/topics/large-language-models', 'snippet': 'Large language models are AI systems capable of understanding and generating human language by processing vast amounts of text data.', 'position': 4}, {'title': 'What is LLM (Large Language Model)? - AWS', 'link': 'https://aws.amazon.com/what-is/large-language-model/', 'snippet': 'Large language models, also known as LLMs, are very large deep learning models that are pre-trained on vast amounts of data.', 'position': 5}], 'peopleAlsoAsk': [{'question': 'Is LLM better than AI?', 'snippet': '👉🏼If you need AI-generated images, music, videos, or creative assets, Generative AI is the right fit. 👉🏼If your business relies on text automation, customer support, or research, an LLM is the better choice.', 'title': 'LLM vs. Generative AI – Know the Differences and Use Cases', 'link': 'https://zerogravitymarketing.com/blog/large-language-model-vs-generative-ai/'}], 'relatedSearches': [{'query': 'LLM AI'}, {'query': 'LLM Law'}, {'query': 'LLM model'}, {'query': 'LLM free'}, {'query': 'LLM ChatGPT'}], 'credits': 1}
-"""
-
-
-def download_articles(links):
+def download_articles(links, max_articles=5):
+    """
+    Télécharge les articles depuis les liens fournis via Newspaper3k.
+    Aucun filtrage de date ici, car déjà géré dans la requête Google.
+    """
     articles = [Article(e) for e in links]
     news_pool.set(articles)
     news_pool.join()
@@ -28,17 +15,58 @@ def download_articles(links):
     for e in articles:
         try:
             e.parse()
-            res.append(e.text)
-        except newspaper.article.ArticleException:
-            pass
+            res.append({
+                "title": e.title,
+                "url": e.url,
+                "publish_date": e.publish_date.date() if e.publish_date else None,
+                "text": e.text
+            })
+            if len(res) >= max_articles:
+                break
+        except Exception:
+            continue
 
     return res
 
 
-def fetch(query, start_date=1, end_date=1):
-    search_tool = SerperDevTool(n_results=5)
-    res = search_tool.run(search_query=query)
-    links = [e["link"] for e in res["organic"]]
-    print(links)
+def fetch(keyword, start_date, end_date, max_articles=5):
+    """
+    Effectue une recherche Google via SerperDevTool entre deux dates précises,
+    puis télécharge les articles correspondants.
+    """
+    # 🔹 Construire la requête avec filtres de date Google
+    formatted_start = start_date.strftime("%Y-%m-%d")
+    formatted_end = end_date.strftime("%Y-%m-%d")
+    query = f'{keyword} after:{formatted_start} before:{formatted_end}'
 
-    return download_articles(links)
+    print(f"🔎 Recherche envoyée à Google : {query}")
+
+    # 🔹 Exécuter la recherche Serper
+    search_tool = SerperDevTool(n_results=30)
+    res = search_tool.run(search_query=query)
+
+    if "organic" not in res:
+        print("⚠️ Aucun résultat trouvé ou erreur de Serper.")
+        return []
+
+    links = [e["link"] for e in res["organic"]]
+    print(f"📄 {len(links)} liens trouvés via Serper")
+
+    # 🔹 Télécharger les articles (sans filtrage de date)
+    return download_articles(links, max_articles)
+
+
+# 🔹 Exemple d’utilisation
+if __name__ == "__main__":
+    start = date(2023, 10, 1)
+    end = date(2025, 10, 16)
+
+    articles = fetch("LLM", start, end, max_articles=5)
+
+    # 🔹 Affichage final
+    for i, art in enumerate(articles, 1):
+        print(f"\n--- Article {i} ---")
+        print(f"Titre : {art['title']}")
+        print(f"URL : {art['url']}")
+        print(f"Date : {art['publish_date']}")
+        # print(f"Contenu (500 premiers caractères) :\n{art['text'][:500]}...\n")
