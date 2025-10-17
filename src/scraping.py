@@ -4,7 +4,8 @@ import newspaper
 from newspaper import Article, news_pool
 from datetime import date
 from typing import List, Dict
-
+from priority.crew import run_prioritize
+import json
 
 def build_date_query(start_date: date, end_date: date) -> str:
     """
@@ -30,7 +31,7 @@ def download_articles(query):
     Télécharge les articles via Newspaper3k et ne retourne que 'title' et 'url'.
     Aucun filtrage par date (géré uniquement via la requête Google).
     """
-    articles = [Article(e["url"]) for e in query]
+    articles = [Article(e) for e in query]
     news_pool.set(articles)
     news_pool.join()
 
@@ -38,10 +39,11 @@ def download_articles(query):
     for i, a in enumerate(articles):
         try:
             a.parse()
-            res.append(
-                {"title": query[i]["title"], "url": query[i]["url"], "text": a.text}
-            )
-        except Exception:
+            res.append({
+                "url": query[i],
+                "text" : a.text
+            })
+        except newspaper.article.ArticleException:
             continue
 
     return res
@@ -64,22 +66,28 @@ def search_query(keyword, start, date, search_type="simple"):
 
     res = [
         {"url": e["link"], "title": e["title"]} for e in res["organic"] if e.get("link")
-    ]    print(res)
+    ]
     res = res[:max_sites]
 
     return res
 
+def priority(search_results):
+    # TODO : et si ça boucle à l’infini ??
+    while True:
+        try:
+            return json.loads(run_prioritize(search_results))
+        except json.JSONDecodeError:
+            continue
 
-def fetch(
-    keyword: str, start_date: date, end_date: date, search_type: str = "simple"
-) -> List[Dict[str, str]]:
+def fetch(keyword: str, start_date: date, end_date: date, search_type: str = "simple") -> List[Dict[str, str]]:
     """
     Construit une requête Google (mot-clé + after/before), ajuste le nombre de sites selon
     le type de recherche, récupère les liens via Serper, puis télécharge les articles.
     Ne renvoie que 'title' et 'url'.
     """
 
-    query = search_query(keyword, start, end, search_type)
+    search_results = search_query(keyword, start, end, search_type)
+    query = priority(search_results)
 
     return download_articles(query)
 
@@ -94,6 +102,5 @@ if __name__ == "__main__":
 
     for i, art in enumerate(articles, 1):
         print(f"\n--- Article {i} ---")
-        print(f"Titre : {art['title']}")
+        #print(f"Titre : {art['title']}")
         print(f"URL : {art['url']}")
-    print(articles[0]["text"])

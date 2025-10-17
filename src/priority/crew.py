@@ -6,12 +6,7 @@ from dotenv import dotenv_values
 
 config = dotenv_values(".env")
 
-llm = LLM(
-    model="mistral/ministral-3b-latest",
-    api_key=config["MISTRAL_API_KEY"],
-    temperature=0.1,
-)
-
+llm = LLM(model="mistral/ministral-3b-latest", api_key=config["MISTRAL_API_KEY"])
 
 @CrewBase
 class PrioritizeCrew:
