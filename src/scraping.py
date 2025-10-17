@@ -6,6 +6,7 @@ from datetime import date
 from typing import List, Dict
 from src.priority.crew import run_prioritize
 import json
+from time import sleep
 
 
 def build_date_query(start_date: date, end_date: date) -> str:
@@ -87,10 +88,10 @@ def fetch(
     le type de recherche, récupère les liens via Serper, puis télécharge les articles.
     Ne renvoie que 'title' et 'url'.
     """
-
+    sleep(1)  # prevent rate limitation
     search_results = search_query(keyword, start_date, end_date, search_type)
     query = priority(search_results)
-
+    sleep(2)
     return download_articles(query)
 
 
