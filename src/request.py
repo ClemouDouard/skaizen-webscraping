@@ -138,7 +138,7 @@ class BulletPoint:
 
     def to_md(self, sources: list[tuple[str, str]]):
         # todo: handle source references
-        return "- **" + self.date + "** - " + self.text
+        return "- " + self.text
 
     def to_json(self):
         pass

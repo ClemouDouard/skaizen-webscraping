@@ -160,7 +160,7 @@ def main():
             sources_container.markdown(
                 "\n".join(
                     [
-                        "-" + src[0] + ": **" + src[1] + "**"
+                        "-" + '"' + src[0] + '"' + ": **" + src[1] + "**"
                         for src in results.get_sources()
                     ]
                 )
