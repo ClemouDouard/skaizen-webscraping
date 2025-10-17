@@ -148,7 +148,7 @@ Don't forget to give the project a star! Thanks again!
     </tr>
   </tbody>
 </table>
-<!-- CONTACT -->
+
 ## Contact
 
 Project Link: [https://github.com/ClemouDouard/skaizen-webscraping](https://github.com/ClemouDouard/skaizen-webscraping)
