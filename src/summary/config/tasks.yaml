@@ -40,7 +40,7 @@ summarize_task:
        - Do NOT write paragraphs, summaries, introductions, or explanations before or after the sections.
 
   expected_output: |
-    The output must always follow this example format exactly (keep in mind, this is an EXAMPLE ! You should keep the EXACT format, but there COULD be more or less sources, so you COULD have [4], [5], ... in your sources):
+    The output must always follow this example format exactly (keep in mind, this is an EXAMPLE ! You should keep the EXACT format, but there COULD be more or less sources, so you COULD have [4], [5], ... in your sources + the dates listed here might not be what YOU FIND IN THE CONTEXT !):
 
     # Sources
     - https://source1.com - Source 1 Name
