@@ -138,11 +138,16 @@ Don't forget to give the project a star! Thanks again!
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Top contributors:
-
-<a href="https://github.com/ClemouDouard/skaizen-webscraping/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ClemouDouard/skaizen-webscraping" alt="contrib.rocks image" />
-</a>
-
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ClemouDouard"><img src="https://avatars.githubusercontent.com/u/144012865?v=4" width="100px;" alt="ClemouDouard"/><br /><sub><b>ClemouDouard</b></sub></a><br /></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Math3mat1x"><img src="https://avatars.githubusercontent.com/u/31096910?v=4" width="100px;" alt="Math3mat1x"/><br /><sub><b>Math3mat1x</b></sub></a><br /></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Paul-Passeron"><img src="https://avatars.githubusercontent.com/u/26693167?v=4" width="100px;" alt="Paul-Passeron"/><br /><sub><b>Paul-Passeron</b></sub></a><br /></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Yasmine-bj"><img src="https://avatars.githubusercontent.com/u/174386195?v=4" width="100px;" alt="Yasmine-bj"/><br /><sub><b>Yasmine-bj</b></sub></a><br /></td>
+    </tr>
+  </tbody>
+</table>
 <!-- CONTACT -->
 ## Contact
 
