@@ -25,43 +25,35 @@ def choose_sites_count(search_type: str) -> int:
     return 10 if str(search_type).lower().strip() == "avance" else 5
 
 
-def download_articles(links: List[str], max_articles: int) -> List[Dict[str, str]]:
+def download_articles(query):
     """
     Télécharge les articles via Newspaper3k et ne retourne que 'title' et 'url'.
     Aucun filtrage par date (géré uniquement via la requête Google).
     """
-    articles = [Article(e) for e in links]
+    articles = [Article(e["url"]) for e in query]
     news_pool.set(articles)
     news_pool.join()
 
-    res: List[Dict[str, str]] = []
-    for a in articles:
+    res = []
+    for i,a in enumerate(articles):
         try:
             a.parse()
             res.append({
-                "title": a.title or "",
-                "url": a.url or ""
+                "title": query[i]["title"],
+                "url": query[i]["url"],
+                "text" : a.text
             })
-            if len(res) >= max_articles:
-                break
         except Exception:
             continue
 
     return res
 
-
-def fetch_and_download(keyword: str, start_date: date, end_date: date, search_type: str = "simple") -> List[Dict[str, str]]:
-    """
-    Construit une requête Google (mot-clé + after/before), ajuste le nombre de sites selon
-    le type de recherche, récupère les liens via Serper, puis télécharge les articles.
-    Ne renvoie que 'title' et 'url'.
-    """
+def search_query(keyword, start, date, search_type):
     max_sites = choose_sites_count(search_type)
-    date_query = build_date_query(start_date, end_date)
+    date_query = build_date_query(start, date)
     query = f"{keyword} {date_query}"
-    print(f"🔎 Recherche envoyée à Google : {query} | type='{search_type}', sites={max_sites}")
 
-    # On demande plus de résultats bruts pour compenser d'éventuels liens non-parsables
+    print(f"🔎 Recherche envoyée à Google : {query} | type='{search_type}', sites={max_sites}")
     search_tool = SerperDevTool(n_results=max_sites * 3)
     res = search_tool.run(search_query=query)
 
@@ -69,11 +61,22 @@ def fetch_and_download(keyword: str, start_date: date, end_date: date, search_ty
         print("⚠️ Aucun résultat trouvé ou erreur de Serper.")
         return []
 
-    links = [e.get("link", "") for e in res.get("organic", []) if e.get("link")]
-    print(f"📄 {len(links)} liens trouvés via Serper (avant limite)")
-    links = links[: max_sites]
+    res = [{"url": e["link"], "title": e["title"]} for e in res["organic"] if e.get("link")]
+    res = res[: max_sites]
 
-    return download_articles(links, max_articles=max_sites)
+    return res
+
+
+def fetch(keyword: str, start_date: date, end_date: date, search_type: str = "simple") -> List[Dict[str, str]]:
+    """
+    Construit une requête Google (mot-clé + after/before), ajuste le nombre de sites selon
+    le type de recherche, récupère les liens via Serper, puis télécharge les articles.
+    Ne renvoie que 'title' et 'url'.
+    """
+
+    query = search_query(keyword, start, end, search_type)
+
+    return download_articles(query)
 
 
 # Exemple d’utilisation
@@ -82,9 +85,10 @@ if __name__ == "__main__":
     end = date(2025, 10, 16)
 
     # 'simple' => 5 sites ; 'avance' => 10 sites
-    articles = fetch_and_download("LLM", start, end, search_type="avance")
+    articles = fetch("LLM", start, end, search_type="avance")
 
     for i, art in enumerate(articles, 1):
         print(f"\n--- Article {i} ---")
         print(f"Titre : {art['title']}")
         print(f"URL : {art['url']}")
+    print(articles[0]["text"])
