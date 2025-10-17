@@ -1,6 +1,5 @@
 from src.summary.crew import run_summary
-from src.priority.crew import run_prioritize
-from src.scraping import fetch, search_query
+from src.scraping import fetch
 from datetime import date
 
 from datetime import date
@@ -28,8 +27,8 @@ def list_to_json_str(articles):
     return json.dumps(data, ensure_ascii=False, indent=2)
 
 
-def summary(topic: str) -> str:
-    context = fetch(topic, date(2023, 10, 16), date(2025, 10, 16))
+def summary(topic: str, start_date: date, end_date: date) -> str:
+    context = fetch(topic, start_date, end_date)
 
     if not context:
         print("⚠️ Aucun article trouvé, résumé impossible.")
@@ -40,10 +39,5 @@ def summary(topic: str) -> str:
     return run_summary(topic, context_json)
 
 
-def priority(request, start, end):
-    search_results = search_query(request, start, end)
-    return run_prioritize(search_results)
-
-
 if __name__ == "__main__":
-    priority("LLM", date(2025, 4, 1), date(2025, 7, 1))
+    print(summary("LLM", date(2023, 10, 16), date(2025, 10, 16)))

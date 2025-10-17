@@ -4,8 +4,9 @@ import newspaper
 from newspaper import Article, news_pool
 from datetime import date
 from typing import List, Dict
-from priority.crew import run_prioritize
+from src.priority.crew import run_prioritize
 import json
+
 
 def build_date_query(start_date: date, end_date: date) -> str:
     """
@@ -39,10 +40,7 @@ def download_articles(query):
     for i, a in enumerate(articles):
         try:
             a.parse()
-            res.append({
-                "url": query[i],
-                "text" : a.text
-            })
+            res.append({"url": query[i], "text": a.text})
         except newspaper.article.ArticleException:
             continue
 
@@ -71,6 +69,7 @@ def search_query(keyword, start, date, search_type="simple"):
 
     return res
 
+
 def priority(search_results):
     # TODO : et si ça boucle à l’infini ??
     while True:
@@ -79,14 +78,17 @@ def priority(search_results):
         except json.JSONDecodeError:
             continue
 
-def fetch(keyword: str, start_date: date, end_date: date, search_type: str = "simple") -> List[Dict[str, str]]:
+
+def fetch(
+    keyword: str, start_date: date, end_date: date, search_type: str = "simple"
+) -> List[Dict[str, str]]:
     """
     Construit une requête Google (mot-clé + after/before), ajuste le nombre de sites selon
     le type de recherche, récupère les liens via Serper, puis télécharge les articles.
     Ne renvoie que 'title' et 'url'.
     """
 
-    search_results = search_query(keyword, start, end, search_type)
+    search_results = search_query(keyword, start_date, end_date, search_type)
     query = priority(search_results)
 
     return download_articles(query)
@@ -102,5 +104,5 @@ if __name__ == "__main__":
 
     for i, art in enumerate(articles, 1):
         print(f"\n--- Article {i} ---")
-        #print(f"Titre : {art['title']}")
+        # print(f"Titre : {art['title']}")
         print(f"URL : {art['url']}")
