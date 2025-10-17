@@ -1,9 +1,13 @@
 from datetime import datetime, timedelta
+from tomllib import load
 import streamlit as st
+from dotenv import load_dotenv
 
 # from src.scraping import fetch
 import src.request as request
 from browser_detection import browser_detection_engine
+
+env = load_dotenv()
 
 st.set_page_config(
     page_title="SKAIZen Scrap",
@@ -153,7 +157,7 @@ def main():
         with st.spinner("⏳ Récupération des résultats..."):
             # results = request.launchRequest(keywords, start_date, end_date)
             # md = results.to_md()
-            md = request.launchRequestDebug(keywords, start_date, end_date)
+            md = request.launchRequest(keywords, start_date, end_date)
 
             # Update the result placeholder
             with result_placeholder.container():

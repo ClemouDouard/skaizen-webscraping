@@ -7,19 +7,37 @@ from src.scraping import fetch
 import json
 
 
-def list_to_json_str(texts):
+def list_to_json_str(articles):
+    """
+    Transforme une liste de dictionnaires {'url', 'title', 'text'}
+    en une chaîne JSON formatée proprement.
+    """
     data = {"articles": []}
 
-    for i, text in enumerate(texts, 1):
-        data["articles"].append({"id": i, "content": text.strip()})
+    for i, article in enumerate(articles, 1):
+        url = article.get("url", "").strip()
+        title = article.get("title", "Untitled").strip()
+        text = article.get("text", "").strip()
+
+        # On ignore les entrées vides
+        if not text:
+            continue
+
+        data["articles"].append({"id": i, "url": url, "title": title, "content": text})
 
     return json.dumps(data, ensure_ascii=False, indent=2)
 
 
-def summary(topic: str, start: date, end: date) -> str:
-    context = fetch(topic, start, end)
+def summary(topic: str, start_date: date, end_date: date) -> str:
+    context = fetch(topic, start_date, end_date)
 
-    return run_summary(topic, list_to_json_str(context))
+    if not context:
+        print("⚠️ Aucun article trouvé, résumé impossible.")
+        return "No articles found."
+
+    context_json = list_to_json_str(context)
+
+    return run_summary(topic, context_json)
 
 
 def parse_date(input: str) -> date | None:
@@ -81,11 +99,22 @@ def get_random_date_between(start: date, end: date) -> date:
     return start + timedelta(days=random.randint(0, delta_days))
 
 
-def launchRequest(keywords: str, start_date: date, end_date: date) -> RequestResult:
-    res = parse_result(summary(keywords, start_date, end_date))
+def launchRequest(
+    keywords: str, start_date: date, end_date: date
+) -> RequestResult | DummyToMd:
+    sum = summary(keywords, start_date, end_date)
+    res = parse_result(sum)
     if res is None:
-        raise NotImplementedError("PARSE ERROR")
+        return DummyToMd(sum)
     return res
+
+
+class DummyToMd:
+    def __init__(self, txt: str):
+        self.txt = txt
+
+    def to_md(self):
+        return self.txt
 
 
 def launchRequestDebug(keywords: str, start_date: date, end_date: date) -> str:
