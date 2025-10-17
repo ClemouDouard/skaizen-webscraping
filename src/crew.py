@@ -75,6 +75,6 @@ def run_summary(topic: str, context: str) -> str:
 def run_prioritize(links):
     """links : {"link", "name"}"""
 
-    result = SummarizeCrew().crew().kickoff(inputs=links)
+    result = PrioritizeCrew().crew().kickoff(inputs=links)
 
     return result.raw

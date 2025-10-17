@@ -1,5 +1,5 @@
 from src.crew import run_summary, run_prioritize
-from src.scraping import fetch
+from src.scraping import fetch, search_query
 from datetime import date
 
 from datetime import date
@@ -55,10 +55,10 @@ def summary(topic: str) -> str:
 
 
 def priority(request, start, end):
-    res = fetch(request, start, end)
+    res = search_query(request, start, end)
     inp = parse_search_result(res)
     return run_prioritize(inp)
 
 
 if __name__ == "__main__":
-    print(summary("LLM"))
+    print(priority("LLM",date(2025,4,1), date(2025,7,1)))

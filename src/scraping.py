@@ -48,7 +48,7 @@ def download_articles(query):
 
     return res
 
-def search_query(keyword, start, date, search_type):
+def search_query(keyword, start, date, search_type="simple"):
     max_sites = choose_sites_count(search_type)
     date_query = build_date_query(start, date)
     query = f"{keyword} {date_query}"
