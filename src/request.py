@@ -60,7 +60,7 @@ def parse_result(markdown: str) -> RequestResult | None:
     sources: list[tuple[str, str]] = []
     while length > cursor and current_line and current_line[0] != "#":
         source = current_line.lstrip("-").strip()
-        source, title = source.split("-", 1)
+        source, title = source.split(" - ", 1)
         sources.append((source.strip(), title.strip()))
 
         cursor += 1
@@ -81,7 +81,10 @@ def parse_result(markdown: str) -> RequestResult | None:
     bullet_points: list[BulletPoint] = []
     while length > cursor and current_line:
         bullet_point = current_line.lstrip("-").strip()
-        start_date, bullet_point = bullet_point.split(":", 1)
+        if ":" in bullet_point:
+            start_date, bullet_point = bullet_point.split(":", 1)
+        else:
+            start_date = ""
         bullet_points.append(BulletPoint(start_date, bullet_point))
 
         cursor += 1
