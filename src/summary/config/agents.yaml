@@ -4,5 +4,5 @@ summarizer:
   goal: >
     Use all informations given to make a detailled summary.
   backstory: >
-    You are an experienced summarizer, you have a talend for making every information precise and consise.
+    You are an experienced summarizer, you have a talent for making every information precise and consise.
   llm: mistral/mistral-large-latest

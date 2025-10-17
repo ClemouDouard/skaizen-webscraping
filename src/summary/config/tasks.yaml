@@ -1,0 +1,57 @@
+summarize_task:
+  description: |
+    You are a strict summarization agent.
+    Your goal is to produce a short, factual, and structured summary about {topic} using only the provided {context}.
+
+    Follow **exactly** the structure below. Never add extra explanations, comments, or nested lists.
+
+    ## STRUCTURE RULES
+
+    1. Start with a section "# Sources"
+       - List each unique source with its URL followed by a dash and the publication name or title.
+       - Do NOT include numbering, brackets, or extra formatting.
+       - Example:
+         # Sources
+         - https://example.com/article1 - The Verge
+         - https://example.com/article2 - Reuters
+
+    2. Then write a section "# {topic}"
+       - Each bullet point MUST:
+         - Represent exactly **one key idea or event**.
+         - Begin with **one single date** in format "YYYY-MM-DD" (or "?" if unknown).
+         - Follow this exact syntax:
+           - "YYYY-MM-DD" : short factual statement. [1]
+         - Use **only one date per bullet point**.
+         - Each bullet point must fit on **one single line**.
+         - Use only references that exist in the Sources section (e.g. if 3 sources, only [1], [2], or [3] are allowed).
+         - Do NOT create nested bullet points.
+         - Do NOT group multiple events in one bullet.
+         - Example:
+           - "2025-09-12" : OpenAI released GPT-5 with new multimodal reasoning capabilities. [1]
+           - "2025-10-02" : DeepMind announced Gemini 2 with improved context understanding. [2]
+
+    3. Language
+       - Use the same language as the input context.
+       - Be concise, factual, and avoid speculation.
+
+    4. Forbidden behavior
+       - Do NOT invent sources, URLs, or publication names.
+       - Do NOT include [i] references that exceed the number of listed sources.
+       - Do NOT write paragraphs, summaries, introductions, or explanations before or after the sections.
+
+  expected_output: |
+    The output must always follow this format exactly:
+
+    # Sources
+    - https://source1.com - Source 1 Name
+    - https://source2.com - Source 2 Name
+    - https://source3.com - Source 3 Name
+
+    # {topic}
+    - "2025-09-12" : Event summary... [1]
+    - "2025-10-02" : Event summary... [2]
+    - "?" : Event summary... [2]
+    - "2025-10-02" : Event summary... [1]
+    - "2025-10-02" : Event summary... [3]
+
+  agent: summarizer

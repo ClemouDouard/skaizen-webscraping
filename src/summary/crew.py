@@ -35,7 +35,7 @@ class SummarizeCrew:
         )
 
 
-def run_crew(topic: str, context: str) -> str:
+def run_summary(topic: str, context: str) -> str:
     """
     Run the research crew.
     """
