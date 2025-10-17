@@ -2,6 +2,7 @@ from crewai_tools import SerperDevTool
 from newspaper import Article, news_pool
 from datetime import datetime, date
 
+
 def download_articles(links, max_articles=5):
     """
     Télécharge les articles depuis les liens fournis via Newspaper3k.
@@ -15,12 +16,14 @@ def download_articles(links, max_articles=5):
     for e in articles:
         try:
             e.parse()
-            res.append({
-                "title": e.title,
-                "url": e.url,
-                "publish_date": e.publish_date.date() if e.publish_date else None,
-                "text": e.text
-            })
+            res.append(
+                {
+                    "title": e.title,
+                    "url": e.url,
+                    "publish_date": e.publish_date.date() if e.publish_date else None,
+                    "text": e.text,
+                }
+            )
             if len(res) >= max_articles:
                 break
         except Exception:
@@ -37,7 +40,7 @@ def fetch(keyword, start_date, end_date, max_articles=5):
     # 🔹 Construire la requête avec filtres de date Google
     formatted_start = start_date.strftime("%Y-%m-%d")
     formatted_end = end_date.strftime("%Y-%m-%d")
-    query = f'{keyword} after:{formatted_start} before:{formatted_end}'
+    query = f"{keyword} after:{formatted_start} before:{formatted_end}"
 
     print(f"🔎 Recherche envoyée à Google : {query}")
 
@@ -69,4 +72,5 @@ if __name__ == "__main__":
         print(f"Titre : {art['title']}")
         print(f"URL : {art['url']}")
         print(f"Date : {art['publish_date']}")
-        # print(f"Contenu (500 premiers caractères) :\n{art['text'][:500]}...\n")
+    print(f"TOUT: {articles}")
+    # print(f"Contenu (500 premiers caractères) :\n{art['text'][:500]}...\n")

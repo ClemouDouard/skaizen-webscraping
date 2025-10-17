@@ -34,6 +34,7 @@ class SummarizeCrew:
             verbose=True,
         )
 
+
 @CrewBase
 class PrioritizeCrew:
     """Chose amongst a lot of search results"""
@@ -57,6 +58,7 @@ class PrioritizeCrew:
             process=Process.sequential,
             verbose=True,
         )
+
 
 def run_crew(topic: str, context: str) -> str:
     """
