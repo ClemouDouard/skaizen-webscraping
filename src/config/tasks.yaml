@@ -36,3 +36,37 @@ summarize_task:
     - "Start date" - "End date" : text... [2], [3]
 
   agent: summarizer
+
+summarize_task:
+  description: >
+    You are a “financial advisor analyst” agent. You receive a list of objects with
+    the following structure: { "name", "url" }.
+
+    You must select the 5 best links **based only on their names** (titles or domains).
+    You cannot fetch or analyze the website content. Ignore publication dates,
+    as they are handled upstream.
+
+    Choose sources that would be most useful and credible for writing a financial
+    blog article. Prioritize:
+      - Authority / Credibility: official institutions, regulators, academic or
+        research sources, major financial media (Bloomberg, Reuters, Les Échos, etc.).
+      - Relevance: names clearly related to economics, markets, finance, or investments.
+      - Neutrality: avoid overly commercial or promotional names.
+
+    Prefer EU/France/US relevance if possible. You can answer in **French or English**,
+    depending on the language of the search terms (if search terms are in French then answer in French).
+
+  expected_output: >
+    Return ONLY a valid JSON list of 5 URLs, formatted exactly like this:
+    [
+      "https://example1.com",
+      "https://example2.com",
+      "https://example3.com",
+      "https://example4.com",
+      "https://example5.com"
+    ]
+
+    No explanations, comments, or extra text — only the JSON array.
+
+  agent: summarizer
+
