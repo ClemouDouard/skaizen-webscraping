@@ -106,7 +106,7 @@ def main():
     # Search container remains the same
     search_container = st.container(border=True)
     with search_container:
-        col1, col2, col3 = st.columns([3, 1, 1])
+        col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
         with col1:
             keywords = st.text_input(
                 "Mots-clés", placeholder="Ex: IA, innovation, santé..."
@@ -117,6 +117,8 @@ def main():
             )
         with col3:
             end_date = st.date_input("End Date")
+        with col4:
+            advanced = st.checkbox("Recherche avancée")
 
     # Create columns for results with different ratios
     # On desktop: 70% for bullet container, 30% for sources
