@@ -4,6 +4,9 @@ from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 from dotenv import dotenv_values
 
+config = dotenv_values(".env")
+
+llm = LLM(model="mistral/ministral-3b-latest", api_key=config["MISTRAL_API_KEY"],temperature=0.1)
 
 @CrewBase
 class PrioritizeCrew:
@@ -30,9 +33,9 @@ class PrioritizeCrew:
         )
 
 
-def run_prioritize(links, names):
-    inputs = {"links": links, "names": names}
+def run_prioritize(search_results):
+    inp = {"context" : search_results}
 
-    result = PrioritizeCrew().crew().kickoff(inputs=inputs)
+    result = PrioritizeCrew().crew().kickoff(inputs=inp)
 
     return result.raw

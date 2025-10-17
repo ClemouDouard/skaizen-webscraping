@@ -1,6 +1,6 @@
 prioritizer_task:
   description: >
-    You are a “financial advisor analyst” agent. You receive : names: {names}, links: {links}.
+    You are a “financial advisor analyst” agent. You receive : {context} which is a list of dictionnaries whose keys are "url" and "title", representing respectively the url of the website and the name displayed on Google.
 
     You must select the 5 best links **based only on their names** (titles or domains).
     You cannot fetch or analyze the website content. Ignore publication dates,
