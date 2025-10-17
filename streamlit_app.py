@@ -157,7 +157,7 @@ def main():
         with st.spinner("⏳ Récupération des résultats..."):
             results = request.launchRequest(keywords, start_date, end_date, advanced)
             md = results.to_md()
-            sources_container.write(
+            sources_container.markdown(
                 "\n".join(
                     [
                         "-" + src[0] + ": **" + src[1] + "**"
@@ -170,8 +170,6 @@ def main():
                 st.markdown(md)
 
             # You can add sources here
-            with sources_placeholder.container():
-                st.info("Sources will appear here")
 
             st.markdown(
                 """
