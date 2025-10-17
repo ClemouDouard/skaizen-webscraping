@@ -8,28 +8,22 @@ import json
 
 
 def list_to_json_str(articles):
+    """
+    Transforme une liste de dictionnaires {'url', 'title', 'text'}
+    en une chaîne JSON formatée proprement.
+    """
     data = {"articles": []}
 
     for i, article in enumerate(articles, 1):
-        title = article.get("title", "Untitled")
-        url = article.get("url", "")
-        publish_date = (
-            article["publish_date"].isoformat() if article.get("publish_date") else "?"
-        )
+        url = article.get("url", "").strip()
+        title = article.get("title", "Untitled").strip()
         text = article.get("text", "").strip()
 
+        # On ignore les entrées vides
         if not text:
             continue
 
-        data["articles"].append(
-            {
-                "id": i,
-                "title": title,
-                "url": url,
-                "publish_date": publish_date,
-                "content": text,
-            }
-        )
+        data["articles"].append({"id": i, "url": url, "title": title, "content": text})
 
     return json.dumps(data, ensure_ascii=False, indent=2)
 
@@ -52,4 +46,4 @@ def priority(request, start, end):
 
 
 if __name__ == "__main__":
-    print(priority("LLM", date(2025, 4, 1), date(2025, 7, 1)))
+    priority("LLM", date(2025, 4, 1), date(2025, 7, 1))

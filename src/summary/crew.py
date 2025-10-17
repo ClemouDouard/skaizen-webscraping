@@ -6,7 +6,11 @@ from dotenv import dotenv_values
 
 config = dotenv_values(".env")
 
-llm = LLM(model="mistral/mistral-large-latest", api_key=config["MISTRAL_API_KEY"])
+llm = LLM(
+    model="mistral/ministral-3b-latest",
+    api_key=config["MISTRAL_API_KEY"],
+    temperature=0.1,
+)
 
 
 @CrewBase
