@@ -30,9 +30,9 @@ class PrioritizeCrew:
         )
 
 
-def run_prioritize(links):
-    """links : {"link", "name"}"""
+def run_prioritize(links, names):
+    inputs = {"links": links, "names": names}
 
-    result = PrioritizeCrew().crew().kickoff(inputs=links)
+    result = PrioritizeCrew().crew().kickoff(inputs=inputs)
 
     return result.raw

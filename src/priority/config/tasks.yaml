@@ -1,7 +1,6 @@
 prioritizer_task:
   description: >
-    You are a “financial advisor analyst” agent. You receive a list of objects with
-    the following structure: {name}, {url}.
+    You are a “financial advisor analyst” agent. You receive : names: {names}, links: {links}.
 
     You must select the 5 best links **based only on their names** (titles or domains).
     You cannot fetch or analyze the website content. Ignore publication dates,

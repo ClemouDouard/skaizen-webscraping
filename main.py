@@ -57,8 +57,8 @@ def summary(topic: str) -> str:
 def priority(request, start, end):
     res = search_query(request, start, end)
     inp = parse_search_result(res)
-    return run_prioritize(inp)
+    return run_prioritize()
 
 
 if __name__ == "__main__":
-    print(priority("LLM",date(2025,4,1), date(2025,7,1)))
+    print(priority("LLM", date(2025, 4, 1), date(2025, 7, 1)))
