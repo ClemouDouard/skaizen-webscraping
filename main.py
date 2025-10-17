@@ -1,5 +1,6 @@
-from src.crew import run_crew
+from src.crew import run_summary, run_prioritize
 from src.scraping import fetch
+from datetime import date
 
 from datetime import date
 import json
@@ -31,6 +32,14 @@ def list_to_json_str(articles):
 
     return json.dumps(data, ensure_ascii=False, indent=2)
 
+def parse_search_result(res):
+    r = {"link":[], "name":[]}
+    for e in res:
+        r["link"].append(e["url"])
+        r["name"].append(e["title"])
+
+    return r
+
 
 def summary(topic: str) -> str:
     context = fetch(topic, date(2023, 10, 16), date(2025, 10, 16))
@@ -43,6 +52,10 @@ def summary(topic: str) -> str:
 
     return run_crew(topic, context_json)
 
+def priority(request, start, end):
+    res = fetch(request,start,end)
+    inp = parse_search_result(res)
+    return run_prioritize(inp)
 
 if __name__ == "__main__":
     print(summary("LLM"))

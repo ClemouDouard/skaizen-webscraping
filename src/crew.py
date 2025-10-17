@@ -60,7 +60,7 @@ class PrioritizeCrew:
         )
 
 
-def run_crew(topic: str, context: str) -> str:
+def run_summary(topic: str, context: str) -> str:
     """
     Run the research crew.
     """
@@ -68,5 +68,13 @@ def run_crew(topic: str, context: str) -> str:
 
     # Create and run the crew
     result = SummarizeCrew().crew().kickoff(inputs=inputs)
+
+    return result.raw
+
+
+def run_prioritize(links):
+    """links : {"link", "name"}"""
+
+    result = SummarizeCrew().crew().kickoff(inputs=links)
 
     return result.raw

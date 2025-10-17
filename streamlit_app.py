@@ -2,11 +2,16 @@ from datetime import datetime, timedelta
 import streamlit as st
 from src.scraping import fetch
 import src.request as request
+from browser_detection import browser_detection_engine
 
 st.set_page_config(
     page_title="SKAIZen Scrap",
     page_icon="⚙️",
 )
+
+
+bde = browser_detection_engine()
+is_mobile: bool = bde["isMobile"] if bde is not None else False
 
 st.markdown(
     """
@@ -65,6 +70,21 @@ st.markdown(
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(37,99,235,0.3);
         }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .header p {
+                font-size: 0.875rem;
+            }
+            /* Stack columns vertically on mobile */
+            [data-testid="column"] {
+                width: 100% !important;
+                flex: 0 0 100% !important;
+            }
+        }
     </style>
         """,
     unsafe_allow_html=True,
@@ -81,33 +101,65 @@ def main():
     """,
         unsafe_allow_html=True,
     )
-    search_container = st.container(horizontal=True, border=True)
-    keywords = search_container.text_input(
-        "Mots-clés", placeholder="Ex: IA, innovation, santé..."
-    )
-    start_date = search_container.date_input(
-        "Start Date", width=100, value=(datetime.today() - timedelta(days=7))
-    )
-    end_date = search_container.date_input("End Date", width=100)
 
-    result_container = st.container(border=True, horizontal=True)
+    # Search container remains the same
+    search_container = st.container(border=True)
+    with search_container:
+        col1, col2, col3 = st.columns([3, 1, 1])
+        with col1:
+            keywords = st.text_input(
+                "Mots-clés", placeholder="Ex: IA, innovation, santé..."
+            )
+        with col2:
+            start_date = st.date_input(
+                "Start Date", value=(datetime.today() - timedelta(days=7))
+            )
+        with col3:
+            end_date = st.date_input("End Date")
 
-    bullet_container = result_container.container(border=True)
-    bullet_container.markdown(
-        "<h3 style='color:#1e3a8a;'>RÉSULTATS</h3>", unsafe_allow_html=True
-    )
+    # Create columns for results with different ratios
+    # On desktop: 70% for bullet container, 30% for sources
+    # On mobile: they'll stack vertically due to CSS
+    if is_mobile:
+        # For mobile, use different column ratios or stack them
+        col_bullet, col_sources = st.columns([2, 1])
+    else:
+        # For desktop, use wider ratio
+        col_bullet, col_sources = st.columns([7, 3])
 
-    sources_container = result_container.container(border=True)
-    sources_container.markdown(
-        "<h3 style='color:#1e3a8a;'>SOURCES</h3>", unsafe_allow_html=True
-    )
+    with col_bullet:
+        bullet_container = st.container(border=True)
+        with bullet_container:
+            st.markdown(
+                "<h3 style='color:#1e3a8a;'>RÉSULTATS</h3>",
+                unsafe_allow_html=True,
+            )
+            # Placeholder for results
+            result_placeholder = st.empty()
+
+    with col_sources:
+        sources_container = st.container(border=True)
+        with sources_container:
+            st.markdown(
+                "<h3 style='color:#1e3a8a;'>SOURCES</h3>", unsafe_allow_html=True
+            )
+            # Placeholder for sources
+            sources_placeholder = st.empty()
 
     if keywords:
         with st.spinner("⏳ Récupération des résultats..."):
             # results = request.launchRequest(keywords, start_date, end_date)
             # md = results.to_md()
             md = request.launchRequestDebug(keywords)
-            _ = bullet_container.markdown(md)
+
+            # Update the result placeholder
+            with result_placeholder.container():
+                st.markdown(md)
+
+            # You can add sources here
+            with sources_placeholder.container():
+                st.info("Sources will appear here")
+
             st.markdown(
                 """
                 <style>
@@ -136,7 +188,6 @@ def main():
             )
     else:
         st.info("Entrez des mots-clés pour lancer une recherche.")
-        st.markdown("</div>", unsafe_allow_html=True)
 
 
 if __name__ == "__main__":

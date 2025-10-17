@@ -1,6 +1,7 @@
-from crewai_tools import SerperDevTool
+from crewai_tools import SerperDevTool, ScrapeWebsiteTool
+from dotenv import load_dotenv
+import newspaper
 from newspaper import Article, news_pool
-from datetime import datetime, date
 
 
 def download_articles(links, max_articles=5):
@@ -47,13 +48,8 @@ def fetch(keyword, start_date, end_date, max_articles=5):
     # 🔹 Exécuter la recherche Serper
     search_tool = SerperDevTool(n_results=30)
     res = search_tool.run(search_query=query)
-
-    if "organic" not in res:
-        print("⚠️ Aucun résultat trouvé ou erreur de Serper.")
-        return []
-
     links = [e["link"] for e in res["organic"]]
-    print(f"📄 {len(links)} liens trouvés via Serper")
+    print(links)
 
     # 🔹 Télécharger les articles (sans filtrage de date)
     return download_articles(links, max_articles)
