@@ -3,5 +3,5 @@ lorem-text
 crewai
 crewai_tools
 newspaper3k
-streamlit-browser-engine
 lxml_html_clean
+streamlit-browser-engine
