@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import streamlit as st
-from src.scraping import fetch
+
+# from src.scraping import fetch
 import src.request as request
 from browser_detection import browser_detection_engine
 
@@ -150,7 +151,7 @@ def main():
         with st.spinner("⏳ Récupération des résultats..."):
             # results = request.launchRequest(keywords, start_date, end_date)
             # md = results.to_md()
-            md = request.launchRequestDebug(keywords)
+            md = request.launchRequestDebug(keywords, start_date, end_date)
 
             # Update the result placeholder
             with result_placeholder.container():

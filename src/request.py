@@ -2,7 +2,7 @@ from __future__ import annotations
 from datetime import date, timedelta
 from typing import final
 import random
-from src.crew import run_crew
+from src.summary.crew import run_summary
 from src.scraping import fetch
 import json
 
@@ -16,10 +16,10 @@ def list_to_json_str(texts):
     return json.dumps(data, ensure_ascii=False, indent=2)
 
 
-def summary(topic: str) -> str:
-    context = fetch(topic)
+def summary(topic: str, start: date, end: date) -> str:
+    context = fetch(topic, start, end)
 
-    return run_crew(topic, list_to_json_str(context))
+    return run_summary(topic, list_to_json_str(context))
 
 
 def parse_date(input: str) -> date | None:
@@ -81,15 +81,15 @@ def get_random_date_between(start: date, end: date) -> date:
     return start + timedelta(days=random.randint(0, delta_days))
 
 
-def launchRequest(keywords: str, _start_date: date, _end_date: date) -> RequestResult:
-    res = parse_result(summary(keywords))
+def launchRequest(keywords: str, start_date: date, end_date: date) -> RequestResult:
+    res = parse_result(summary(keywords, start_date, end_date))
     if res is None:
         raise NotImplementedError("PARSE ERROR")
     return res
 
 
-def launchRequestDebug(keywords: str) -> str:
-    return summary(keywords)
+def launchRequestDebug(keywords: str, start_date: date, end_date: date) -> str:
+    return summary(keywords, start_date, end_date)
 
 
 def date_to_json(d: date | None):
